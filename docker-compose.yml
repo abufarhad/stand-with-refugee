@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  consul:
+    image: consul:latest
+    container_name: consul_dev
+    restart: always
+    ports:
+      - 8500:8500
+    networks:
+      - refugee_networks
+
+  db:
+    container_name: refugee_mysql
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    ports:
+      - 3309:3306
+    volumes:
+      - refugee_db:/var/lib/mysql:rw
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=12345678
+      - MYSQL_DATABASE=refugee
+      - MYSQL_ROOT_PASSWORD=12345678
+    tty: true
+    networks:
+      - refugee_networks
+
+  refugee:
+    container_name: refugee
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    command: serve  # make `serve` into `seed` or `seed --truncate=true` if anyone want to run the seeder
+    volumes:
+      - ./:/project
+    environment:
+      - CONSUL_URL=consul_dev:8500
+      - CONSUL_PATH=refugee
+    tty: true
+    depends_on:
+      - consul
+      - db
+    networks:
+      - refugee_networks
+
+networks:
+  refugee_networks:
+    name: refugee_networks
+    driver: bridge
+
+volumes:
+  refugee_db:
+    name: db-data
