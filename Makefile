@@ -1,6 +1,5 @@
-PROJECT_NAME := refugee
+PROJECT_NAME := clean
 PKG_LIST := $(shell go list ${PROJECT_NAME}/... | grep -v /vendor/)
-
 
 .PHONY: all dep build clean test
 
@@ -35,4 +34,3 @@ coverage: ## Generate global code coverage report
 clean: ## Remove previous build
 	@rm -f $(PROJECT_NAME)
 	@docker-compose down
-
