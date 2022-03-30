@@ -21,26 +21,6 @@ type users struct {
 	rSvc  svc.ICache
 }
 
-func (u *users) DeleteCommitments(cId uint) *errors.RestErr {
-	return u.urepo.DeleteCommitments(cId)
-}
-
-func (u *users) PostCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr) {
-	resp, err := u.urepo.SaveCommitments(commitments)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func (u *users) GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr) {
-	resp, err := u.urepo.AllCommitments(cid)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
 func NewUsersService(urepo repository.IUsers, rSvc svc.ICache) svc.IUsers {
 	return &users{
 		urepo: urepo,
@@ -48,6 +28,24 @@ func NewUsersService(urepo repository.IUsers, rSvc svc.ICache) svc.IUsers {
 	}
 }
 
+// Help stuff
+func (u *users) CreateHelp(help domain.Help) (*domain.User, *errors.RestErr) {
+	resp, saveErr := u.urepo.SaveHelp(&help)
+	if saveErr != nil {
+		return nil, saveErr
+	}
+	return resp, nil
+}
+
+func (u *users) UpdateHelp(help domain.Help) *errors.RestErr {
+	if updateErr := u.urepo.UpdateHelp(&help); updateErr != nil {
+		return updateErr
+	}
+
+	return nil
+}
+
+/// Doctor stuff
 func (u *users) CreateUser(user domain.User) (*domain.User, *errors.RestErr) {
 	resp, saveErr := u.urepo.Save(&user)
 	if saveErr != nil {
@@ -210,4 +208,26 @@ func (u *users) deleteUserCache(userID int) error {
 
 func passwordResetSecret(user *domain.User) string {
 	return user.Password + strconv.Itoa(int(user.CreatedAt.Unix()))
+}
+
+///Commitments stuff
+
+func (u *users) PostCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr) {
+	resp, err := u.urepo.SaveCommitments(commitments)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *users) GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr) {
+	resp, err := u.urepo.AllCommitments(cid)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *users) DeleteCommitments(cId uint) *errors.RestErr {
+	return u.urepo.DeleteCommitments(cId)
 }

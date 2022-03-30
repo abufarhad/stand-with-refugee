@@ -335,3 +335,27 @@ func (r *users) DeleteCommitments(cid uint) *errors.RestErr {
 	}
 	return nil
 }
+
+// Help  stuff
+func (r *users) SaveHelp(help *domain.Help) (*domain.Help, *errors.RestErr) {
+	res := r.DB.Model(&domain.Help{}).Create(&help)
+
+	if res.Error != nil {
+		logger.Error("error occurred when create user", res.Error)
+		restErr := fmt.Sprintf("%s", res.Error)
+		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
+	}
+
+	return help, nil
+}
+
+func (r *users) UpdateHelp(help *domain.Help) *errors.RestErr {
+	res := r.DB.Model(&domain.User{}).Where("id = ?", help.ID).Updates(&help)
+
+	if res.Error != nil {
+		logger.Error("error occurred when updating user by user id", res.Error)
+		return errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+
+	return nil
+}

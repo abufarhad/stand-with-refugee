@@ -9,13 +9,16 @@ import (
 type IUsers interface {
 	CreateUser(domain.User) (*domain.User, *errors.RestErr)
 	GetUserById(uid uint) (*domain.User, *errors.RestErr)
+	GetUserByEmail(useremail string) (*domain.User, error)
+	UpdateUser(userID uint, req serializers.UserReq) *errors.RestErr
 
 	PostCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr)
 	GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr)
 	DeleteCommitments(cid uint) *errors.RestErr
 
-	GetUserByEmail(useremail string) (*domain.User, error)
-	UpdateUser(userID uint, req serializers.UserReq) *errors.RestErr
+	CreateHelp(help domain.Help) (*domain.User, *errors.RestErr)
+	UpdateHelp(help domain.Help) *errors.RestErr
+
 	ChangePassword(id int, data *serializers.ChangePasswordReq) error
 	ForgotPassword(email string) error
 	VerifyResetPassword(req *serializers.VerifyResetPasswordReq) error

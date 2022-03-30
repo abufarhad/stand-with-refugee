@@ -87,59 +87,6 @@ func (ctr *users) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]interface{}{"message": msgutil.EntityUpdateSuccessMsg("user")})
 }
 
-func (ctr *users) PostCommitments(c echo.Context) error {
-	loggedInUser, err := GetUserFromContext(c)
-	if err != nil {
-		logger.Error(err.Error(), err)
-		restErr := errors.NewUnauthorizedError("no logged-in user found")
-		return c.JSON(restErr.Status, restErr)
-	}
-
-	var commitment domain.Commitments
-
-	if err := c.Bind(&commitment); err != nil {
-		restErr := errors.NewBadRequestError("invalid json body")
-		return c.JSON(restErr.Status, restErr)
-	}
-
-	commitment.ID = uint(loggedInUser.ID)
-
-	resp, postErr := ctr.uSvc.PostCommitments(commitment)
-	if postErr != nil {
-		return c.JSON(postErr.Status, postErr)
-	}
-
-	return c.JSON(http.StatusOK, resp)
-}
-
-func (ctr *users) GetCommitments(c echo.Context) error {
-	cId, cErr := strconv.Atoi(c.Param("c_id"))
-	if cErr != nil {
-		restErr := errors.NewBadRequestError(cErr.Error())
-		return c.JSON(restErr.Status, restErr)
-	}
-
-	resp, err := ctr.uSvc.GetCommitments(uint(cId))
-	if err != nil {
-		return c.JSON(err.Status, err)
-	}
-	return c.JSON(http.StatusOK, resp)
-}
-
-func (ctr *users) DeleteCommitments(c echo.Context) error {
-	cId, cErr := strconv.Atoi(c.Param("c_id"))
-	if cErr != nil {
-		restErr := errors.NewBadRequestError(cErr.Error())
-		return c.JSON(restErr.Status, restErr)
-	}
-
-	err := ctr.uSvc.DeleteCommitments(uint(cId))
-	if err != nil {
-		return c.JSON(err.Status, err)
-	}
-	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Deleted successfully"})
-}
-
 func (ctr *users) ChangePassword(c echo.Context) error {
 	loggedInUser, err := GetUserFromContext(c)
 	if err != nil {
@@ -259,4 +206,103 @@ func (ctr *users) ResetPassword(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, "password reset successful")
+}
+
+//Creating  commitments stuff
+func (ctr *users) PostCommitments(c echo.Context) error {
+	loggedInUser, err := GetUserFromContext(c)
+	if err != nil {
+		logger.Error(err.Error(), err)
+		restErr := errors.NewUnauthorizedError("no logged-in user found")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	var commitment domain.Commitments
+
+	if err := c.Bind(&commitment); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	commitment.ID = uint(loggedInUser.ID)
+
+	resp, postErr := ctr.uSvc.PostCommitments(commitment)
+	if postErr != nil {
+		return c.JSON(postErr.Status, postErr)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) GetCommitments(c echo.Context) error {
+	cId, cErr := strconv.Atoi(c.Param("c_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	resp, err := ctr.uSvc.GetCommitments(uint(cId))
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) DeleteCommitments(c echo.Context) error {
+	cId, cErr := strconv.Atoi(c.Param("c_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	err := ctr.uSvc.DeleteCommitments(uint(cId))
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Deleted successfully"})
+}
+
+// Creating Help stuff
+func (ctr *users) CreateHelp(c echo.Context) error {
+	var help domain.Help
+
+	if err := c.Bind(&help); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	result, saveErr := ctr.uSvc.CreateHelp(help)
+	if saveErr != nil {
+		return c.JSON(saveErr.Status, saveErr)
+	}
+	var resp serializers.UserResp
+	respErr := methodsutil.StructToStruct(result, &resp)
+	if respErr != nil {
+		return respErr
+	}
+
+	return c.JSON(http.StatusCreated, resp)
+}
+
+func (ctr *users) UpdateHelp(c echo.Context) error {
+
+	var help domain.Help
+	hId, cErr := strconv.Atoi(c.Param("h_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	if err := c.Bind(&help); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	help.ID = uint(hId)
+	updateErr := ctr.uSvc.UpdateHelp(help)
+	if updateErr != nil {
+		return c.JSON(updateErr.Status, updateErr)
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{"message": msgutil.EntityUpdateSuccessMsg("user")})
 }
