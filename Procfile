@@ -1,1 +1,1 @@
-web: serve
+web: go run main.go serve
