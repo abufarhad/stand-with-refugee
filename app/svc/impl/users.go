@@ -21,6 +21,26 @@ type users struct {
 	rSvc  svc.ICache
 }
 
+func (u *users) DeleteCommitments(cId uint) *errors.RestErr {
+	return u.urepo.DeleteCommitments(cId)
+}
+
+func (u *users) PostCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr) {
+	resp, err := u.urepo.SaveCommitments(commitments)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *users) GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr) {
+	resp, err := u.urepo.AllCommitments(cid)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func NewUsersService(urepo repository.IUsers, rSvc svc.ICache) svc.IUsers {
 	return &users{
 		urepo: urepo,

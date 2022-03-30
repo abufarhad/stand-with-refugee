@@ -10,6 +10,7 @@ import (
 	"clean/infra/errors"
 	"clean/infra/logger"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -29,6 +30,9 @@ func NewUsersController(grp interface{}, uSvc svc.IUsers) {
 
 	g.POST("/v1/user/signup", uc.Create)
 	g.PATCH("/v1/user", uc.Update)
+	g.POST("/v1/user/commitments", uc.PostCommitments)
+	g.GET("/v1/user/commitments", uc.GetCommitments)
+	g.DELETE("/v1/user/commitment/delete/:c_id", uc.DeleteCommitments)
 
 	g.POST("/v1/password/change", uc.ChangePassword)
 	g.POST("/v1/password/forgot", uc.ForgotPassword)
@@ -81,6 +85,59 @@ func (ctr *users) Update(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{"message": msgutil.EntityUpdateSuccessMsg("user")})
+}
+
+func (ctr *users) PostCommitments(c echo.Context) error {
+	loggedInUser, err := GetUserFromContext(c)
+	if err != nil {
+		logger.Error(err.Error(), err)
+		restErr := errors.NewUnauthorizedError("no logged-in user found")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	var commitment domain.Commitments
+
+	if err := c.Bind(&commitment); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	commitment.ID = uint(loggedInUser.ID)
+
+	resp, postErr := ctr.uSvc.PostCommitments(commitment)
+	if postErr != nil {
+		return c.JSON(postErr.Status, postErr)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) GetCommitments(c echo.Context) error {
+	cId, cErr := strconv.Atoi(c.Param("c_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	resp, err := ctr.uSvc.GetCommitments(uint(cId))
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) DeleteCommitments(c echo.Context) error {
+	cId, cErr := strconv.Atoi(c.Param("c_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	err := ctr.uSvc.DeleteCommitments(uint(cId))
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Deleted successfully"})
 }
 
 func (ctr *users) ChangePassword(c echo.Context) error {

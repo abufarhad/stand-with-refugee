@@ -61,6 +61,7 @@ func ConnectDb() {
 		&domain.Permission{},
 		&domain.RolePermission{},
 		&domain.Specialization{},
+		&domain.Commitments{},
 	)
 
 	logger.Info("mysql connection successful...")

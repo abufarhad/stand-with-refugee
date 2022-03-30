@@ -302,3 +302,36 @@ func (r *users) tokenUserFetchQuery() *gorm.DB {
 		Where("users.deleted_at IS NULL").
 		Group("users.id")
 }
+
+// SaveCommitments commitments
+func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr) {
+	res := r.DB.Model(&domain.Commitments{}).Create(&commitments)
+
+	if res.Error != nil {
+		logger.Error("error occurred when create commitments", res.Error)
+		restErr := fmt.Sprintf("%s", res.Error)
+		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
+	}
+
+	return &commitments, nil
+}
+
+func (r *users) AllCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr) {
+	commitments := []*domain.Commitments{}
+
+	err := r.DB.Model(&domain.Commitments{}).Where("id = ?", cid).Find(&commitments).Error
+	if err != nil {
+		logger.Error("error occurred when getting all Commitments", err)
+		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+	return commitments, nil
+}
+
+func (r *users) DeleteCommitments(cid uint) *errors.RestErr {
+	err := r.DB.Model(&domain.Commitments{}).Where("id = ?", cid).Delete(&domain.Commitments{}).Error
+	if err != nil {
+		logger.Error("error occurred when deleting  Commitments", err)
+		return errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+	return nil
+}

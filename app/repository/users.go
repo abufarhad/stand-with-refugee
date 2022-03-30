@@ -18,4 +18,8 @@ type IUsers interface {
 	ResetPassword(userID int, hashedPass []byte) error
 	GetUserWithPermissions(userID uint, withPermission bool) (*domain.UserWithPerms, *errors.RestErr)
 	GetTokenUser(id uint) (*domain.VerifyTokenResp, *errors.RestErr)
+
+	SaveCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr)
+	AllCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr)
+	DeleteCommitments(cid uint) *errors.RestErr
 }
