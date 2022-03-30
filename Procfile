@@ -1,1 +1,1 @@
-web: bin/serve
+web: bin/stand-with-refugee
