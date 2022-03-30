@@ -1,4 +1,4 @@
-# Clean Architecture with JWT & Cache based authentication in golang
+# Stand_With_Refugee Backend Golang
 
 ## Run Seeder
 ```terminal
@@ -16,9 +16,4 @@ go run main.go seed --truncate=true or -t=true
 go mod vendor
 
 go run main.go serve
-```
-
-## Docker
-```terminal
-make development
 ```
