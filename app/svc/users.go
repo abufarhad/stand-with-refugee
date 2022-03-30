@@ -16,7 +16,7 @@ type IUsers interface {
 	GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr)
 	DeleteCommitments(cid uint) *errors.RestErr
 
-	CreateHelp(help domain.Help) (*domain.User, *errors.RestErr)
+	CreateHelp(help domain.Help) (*domain.Help, *errors.RestErr)
 	UpdateHelp(help domain.Help) *errors.RestErr
 
 	ChangePassword(id int, data *serializers.ChangePasswordReq) error

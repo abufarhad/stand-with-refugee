@@ -29,7 +29,7 @@ func NewUsersService(urepo repository.IUsers, rSvc svc.ICache) svc.IUsers {
 }
 
 // Help stuff
-func (u *users) CreateHelp(help domain.Help) (*domain.User, *errors.RestErr) {
+func (u *users) CreateHelp(help domain.Help) (*domain.Help, *errors.RestErr) {
 	resp, saveErr := u.urepo.SaveHelp(&help)
 	if saveErr != nil {
 		return nil, saveErr
