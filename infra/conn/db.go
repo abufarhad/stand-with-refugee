@@ -19,8 +19,9 @@ var db *gorm.DB
 func ConnectDb() {
 	conf := config.Db()
 
-	logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
+	//logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
 
+	logger.Info("connecting to sqlite ...")
 	// logMode := gormlogger.Silent
 	//if conf.Debug {
 	//	logMode = gormlogger.Info

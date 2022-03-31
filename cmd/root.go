@@ -26,7 +26,7 @@ func init() {
 func Execute() {
 	config.LoadConfig()
 	conn.ConnectDb()
-	conn.ConnectRedis()
+	//conn.ConnectRedis()
 
 	logger.Info("about to start the application")
 

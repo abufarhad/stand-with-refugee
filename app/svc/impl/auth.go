@@ -56,15 +56,15 @@ func (as *auth) Login(req *serializers.LoginReq) (*serializers.LoginResp, error)
 		return nil, errors.ErrCreateJwt
 	}
 
-	if err = as.tSvc.StoreTokenUuid(user.ID, token); err != nil {
-		logger.Error(err.Error(), err)
-		return nil, errors.ErrStoreTokenUuid
-	}
-
-	if err = as.urepo.SetLastLoginAt(user); err != nil {
-		logger.Error("error occur when trying to set last login", err)
-		return nil, errors.ErrUpdateLastLogin
-	}
+	//if err = as.tSvc.StoreTokenUuid(user.ID, token); err != nil {
+	//	logger.Error(err.Error(), err)
+	//	return nil, errors.ErrStoreTokenUuid
+	//}
+	//
+	//if err = as.urepo.SetLastLoginAt(user); err != nil {
+	//	logger.Error("error occur when trying to set last login", err)
+	//	return nil, errors.ErrUpdateLastLogin
+	//}
 
 	res := &serializers.LoginResp{
 		AccessToken:  token.AccessToken,
