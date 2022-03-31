@@ -13,11 +13,11 @@ require (
 	github.com/spf13/viper v1.7.1
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
-	gorm.io/driver/mysql v1.1.0
-	gorm.io/gorm v1.21.10
+	gorm.io/gorm v1.23.1
 )
 
 require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.19.0 // indirect
+	gorm.io/driver/sqlite v1.3.1
 )
