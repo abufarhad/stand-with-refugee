@@ -3,7 +3,6 @@ package http
 import (
 	container "clean/app"
 	"clean/app/http/middlewares"
-	"clean/infra/config"
 	"clean/infra/logger"
 	"context"
 	"os"
@@ -23,7 +22,7 @@ func Start() {
 
 	container.Init(e.Group("api"))
 
-	port := config.App().Port
+	//port := config.App().Port
 	hPort := os.Getenv("PORT")
 
 	//myPort := (port || hPort)
