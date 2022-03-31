@@ -30,9 +30,14 @@ func NewUsersController(grp interface{}, uSvc svc.IUsers) {
 
 	g.POST("/v1/user/signup", uc.Create)
 	g.PATCH("/v1/user", uc.Update)
+
 	g.POST("/v1/user/commitments", uc.PostCommitments)
 	g.GET("/v1/user/commitments", uc.GetCommitments)
 	g.DELETE("/v1/user/commitment/delete/:c_id", uc.DeleteCommitments)
+
+	g.POST("/v1/place/create", uc.PlaceCreate)
+	g.GET("/v1/place/getall", uc.GetPlaces)
+	g.DELETE("/v1/place/delete/:p_id", uc.DeletePlaces)
 
 	g.POST("/v1/password/change", uc.ChangePassword)
 	g.POST("/v1/password/forgot", uc.ForgotPassword)
@@ -305,4 +310,45 @@ func (ctr *users) UpdateHelp(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{"message": msgutil.EntityUpdateSuccessMsg("user")})
+}
+
+//Creating  place stuff
+func (ctr *users) PlaceCreate(c echo.Context) error {
+
+	var place domain.Place
+
+	if err := c.Bind(&place); err != nil {
+		restErr := errors.NewBadRequestError("invalid json body")
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	resp, postErr := ctr.uSvc.PlaceCreate(place)
+	if postErr != nil {
+		return c.JSON(postErr.Status, postErr)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) GetPlaces(c echo.Context) error {
+
+	resp, err := ctr.uSvc.GetPlaces()
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (ctr *users) DeletePlaces(c echo.Context) error {
+	pId, cErr := strconv.Atoi(c.Param("p_id"))
+	if cErr != nil {
+		restErr := errors.NewBadRequestError(cErr.Error())
+		return c.JSON(restErr.Status, restErr)
+	}
+
+	err := ctr.uSvc.DeletePlaces(uint(pId))
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Deleted successfully"})
 }

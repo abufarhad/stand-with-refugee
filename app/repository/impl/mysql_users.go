@@ -359,3 +359,36 @@ func (r *users) UpdateHelp(help *domain.Help) *errors.RestErr {
 
 	return nil
 }
+
+// Place stuff
+func (r *users) SavePlace(place domain.Place) (*domain.Place, *errors.RestErr) {
+	res := r.DB.Model(&domain.Place{}).Create(&place)
+
+	if res.Error != nil {
+		logger.Error("error occurred when create user", res.Error)
+		restErr := fmt.Sprintf("%s", res.Error)
+		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
+	}
+
+	return &place, nil
+}
+
+func (r *users) AllPlaces() ([]*domain.Place, *errors.RestErr) {
+	places := []*domain.Place{}
+
+	err := r.DB.Model(&domain.Place{}).Find(&places).Error
+	if err != nil {
+		logger.Error("error occurred when getting all Commitments", err)
+		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+	return places, nil
+}
+
+func (r *users) DeletePLace(pid uint) *errors.RestErr {
+	err := r.DB.Model(&domain.Place{}).Where("id = ?", pid).Delete(&domain.Place{}).Error
+	if err != nil {
+		logger.Error("error occurred when deleting  Commitments", err)
+		return errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+	return nil
+}

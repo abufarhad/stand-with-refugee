@@ -24,6 +24,10 @@ type IUsers interface {
 	AllCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr)
 	DeleteCommitments(cid uint) *errors.RestErr
 
+	SavePlace(place domain.Place) (*domain.Place, *errors.RestErr)
+	AllPlaces() ([]*domain.Place, *errors.RestErr)
+	DeletePLace(pid uint) *errors.RestErr
+
 	SaveHelp(help *domain.Help) (*domain.Help, *errors.RestErr)
 	UpdateHelp(help *domain.Help) *errors.RestErr
 }

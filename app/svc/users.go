@@ -19,6 +19,10 @@ type IUsers interface {
 	CreateHelp(help domain.Help) (*domain.Help, *errors.RestErr)
 	UpdateHelp(help domain.Help) *errors.RestErr
 
+	PlaceCreate(place domain.Place) (*domain.Place, *errors.RestErr)
+	GetPlaces() ([]*domain.Place, *errors.RestErr)
+	DeletePlaces(cid uint) *errors.RestErr
+
 	ChangePassword(id int, data *serializers.ChangePasswordReq) error
 	ForgotPassword(email string) error
 	VerifyResetPassword(req *serializers.VerifyResetPasswordReq) error

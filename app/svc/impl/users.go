@@ -231,3 +231,25 @@ func (u *users) GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr
 func (u *users) DeleteCommitments(cId uint) *errors.RestErr {
 	return u.urepo.DeleteCommitments(cId)
 }
+
+// Place suff
+
+func (u *users) PlaceCreate(place domain.Place) (*domain.Place, *errors.RestErr) {
+	resp, err := u.urepo.SavePlace(place)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *users) GetPlaces() ([]*domain.Place, *errors.RestErr) {
+	resp, err := u.urepo.AllPlaces()
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u *users) DeletePlaces(cid uint) *errors.RestErr {
+	return u.urepo.DeletePLace(cid)
+}
