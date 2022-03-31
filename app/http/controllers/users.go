@@ -32,7 +32,7 @@ func NewUsersController(grp interface{}, uSvc svc.IUsers) {
 	g.PATCH("/v1/user", uc.Update)
 
 	g.POST("/v1/user/commitments", uc.PostCommitments)
-	g.GET("/v1/user/commitments", uc.GetCommitments)
+	g.GET("/v1/user/commitments/:d_id", uc.GetCommitments)
 	g.DELETE("/v1/user/commitment/delete/:c_id", uc.DeleteCommitments)
 
 	g.POST("/v1/place/create", uc.PlaceCreate)
@@ -229,7 +229,7 @@ func (ctr *users) PostCommitments(c echo.Context) error {
 		return c.JSON(restErr.Status, restErr)
 	}
 
-	commitment.ID = uint(loggedInUser.ID)
+	commitment.DoctorId = uint(loggedInUser.ID)
 
 	resp, postErr := ctr.uSvc.PostCommitments(commitment)
 	if postErr != nil {
@@ -240,7 +240,7 @@ func (ctr *users) PostCommitments(c echo.Context) error {
 }
 
 func (ctr *users) GetCommitments(c echo.Context) error {
-	cId, cErr := strconv.Atoi(c.Param("c_id"))
+	cId, cErr := strconv.Atoi(c.Param("d_id"))
 	if cErr != nil {
 		restErr := errors.NewBadRequestError(cErr.Error())
 		return c.JSON(restErr.Status, restErr)

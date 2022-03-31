@@ -319,7 +319,7 @@ func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitm
 func (r *users) AllCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr) {
 	commitments := []*domain.Commitments{}
 
-	err := r.DB.Model(&domain.Commitments{}).Where("id = ?", cid).Find(&commitments).Error
+	err := r.DB.Model(&domain.Commitments{}).Where("doctor_id = ?", cid).Find(&commitments).Error
 	if err != nil {
 		logger.Error("error occurred when getting all Commitments", err)
 		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
