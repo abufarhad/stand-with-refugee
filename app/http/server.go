@@ -24,10 +24,12 @@ func Start() {
 	container.Init(e.Group("api"))
 
 	port := config.App().Port
+	hPort := os.Getenv("PORT")
 
+	//myPort := (port || hPort)
 	// start http server
 	go func() {
-		e.Logger.Fatal(e.Start(":" + port))
+		e.Logger.Fatal(e.Start(":" + hPort))
 	}()
 
 	// graceful shutdown
