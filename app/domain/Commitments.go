@@ -4,7 +4,8 @@ import "time"
 
 type Commitments struct {
 	ID        uint       `json:"id"`
-	Place     string     `json:"place"`
+	PlaceID   uint       `json:"place_id"`
+	Place     Place      `gorm:"foreignKey:PlaceID" json:"-"`
 	Date      time.Time  `json:"date"`
 	StartTime time.Time  `json:"start_time"`
 	EndTime   time.Time  `json:"end_time"`

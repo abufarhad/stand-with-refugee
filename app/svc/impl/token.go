@@ -44,7 +44,7 @@ func (t *token) CreateToken(userID uint) (*serializers.JwtToken, error) {
 	}
 
 	atClaims := jwt.MapClaims{}
-	atClaims["uid"] = user.ID
+	atClaims["uid"] = token.UserID
 	atClaims["aid"] = token.AccessUuid
 	atClaims["rid"] = token.RefreshUuid
 	atClaims["exp"] = token.AccessExpiry
