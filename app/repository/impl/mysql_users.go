@@ -316,13 +316,6 @@ func (r *users) tokenUserFetchQuery() *gorm.DB {
 
 // SaveCommitments commitments
 func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr) {
-	res := r.DB.Model(&domain.Commitments{}).Create(&commitments)
-
-	if res.Error != nil {
-		logger.Error("error occurred when create commitments", res.Error)
-		restErr := fmt.Sprintf("%s", res.Error)
-		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
-	}
 
 	usr, _ := r.GetUserByID(commitments.DoctorId)
 	upErr := r.DB.Model(&domain.User{}).Where("id = ?", usr.ID).Updates(map[string]interface{}{
@@ -330,8 +323,18 @@ func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitm
 	}).Error
 
 	if upErr != nil {
-		logger.Error("error occurred when updating user by user id", res.Error)
+		logger.Error("error occurred when updating user by user id", upErr)
 		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+
+	//usr, _ := r.GetUserByID(commitments.DoctorId)
+	commitments.Point = usr.TotalPoint
+	res := r.DB.Model(&domain.Commitments{}).Create(&commitments)
+
+	if res.Error != nil {
+		logger.Error("error occurred when create commitments", res.Error)
+		restErr := fmt.Sprintf("%s", res.Error)
+		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
 	}
 
 	return &commitments, nil
