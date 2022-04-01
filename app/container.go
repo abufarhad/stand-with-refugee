@@ -19,6 +19,7 @@ func Init(g interface{}) {
 	roleRepo := repoImpl.NewMySqlRolesRepository(db)
 	permissionRepo := repoImpl.NewMySqlPermissionsRepository(db)
 	speRepo := repoImpl.NewSpecializationRepository(db)
+	symRepo := repoImpl.NewSymptomRepository(db)
 
 	cacheSvc := svcImpl.NewRedisService(redis)
 	sysSvc := svcImpl.NewSystemService(sysRepo)
@@ -28,6 +29,7 @@ func Init(g interface{}) {
 	roleSvc := svcImpl.NewRolesService(roleRepo)
 	permissionSvc := svcImpl.NewPermissionsService(permissionRepo)
 	spSvc := svcImpl.NewSpecializationService(speRepo)
+	symSvc := svcImpl.NewSymptomService(symRepo)
 
 	controllers.NewSystemController(g, sysSvc)
 	controllers.NewAuthController(g, authSvc, userSvc)
@@ -35,4 +37,5 @@ func Init(g interface{}) {
 	controllers.NewRolesController(g, acl, roleSvc)
 	controllers.NewPermissionsController(g, acl, permissionSvc)
 	controllers.NewSpecializationController(g, spSvc)
+	controllers.NewSymptomController(g, symSvc)
 }
