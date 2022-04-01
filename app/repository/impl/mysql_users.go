@@ -270,8 +270,7 @@ func (r *users) GetUserWithPermissions(userID uint, withPermission bool) (*domai
 func (r *users) GetUserRankListByPoint() ([]*domain.User, *errors.RestErr) {
 	users := []*domain.User{}
 
-	err := r.DB.Model(&domain.User{}).Order("total_point").
-		Group("doctor_id").Find(&users).Error
+	err := r.DB.Model(&domain.User{}).Order("total_point desc").Find(&users).Error
 	if err != nil {
 		logger.Error("error occurred when getting all users", err)
 		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
@@ -326,9 +325,9 @@ func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitm
 	}
 
 	usr, _ := r.GetUserByID(commitments.DoctorId)
-	upErr := r.DB.Model(&domain.User{}).Updates(map[string]interface{}{
+	upErr := r.DB.Model(&domain.User{}).Where("id = ?", usr.ID).Updates(map[string]interface{}{
 		"total_point": usr.TotalPoint + commitments.Point,
-	})
+	}).Error
 
 	if upErr != nil {
 		logger.Error("error occurred when updating user by user id", res.Error)

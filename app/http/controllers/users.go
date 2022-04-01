@@ -30,6 +30,7 @@ func NewUsersController(grp interface{}, uSvc svc.IUsers) {
 
 	g.POST("/v1/user/signup", uc.Create)
 	g.PATCH("/v1/user", uc.Update)
+	g.GET("/v1/user/ranklist", uc.GetUserRankList)
 
 	g.POST("/v1/user/commitments", uc.PostCommitments)
 	g.GET("/v1/user/commitments/:d_id", uc.GetCommitments)
@@ -357,9 +358,15 @@ func (ctr *users) DeletePlaces(c echo.Context) error {
 // Userlist point wise
 func (ctr *users) GetUserRankList(c echo.Context) error {
 
-	resp, err := ctr.uSvc.GetUserRankList()
+	result, err := ctr.uSvc.GetUserRankList()
 	if err != nil {
 		return c.JSON(err.Status, err)
 	}
+	var resp []*serializers.UserResp
+	respErr := methodsutil.StructToStruct(result, &resp)
+	if respErr != nil {
+		return respErr
+	}
+
 	return c.JSON(http.StatusOK, resp)
 }

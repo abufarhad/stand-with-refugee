@@ -35,11 +35,9 @@ type UserResp struct {
 	ID             uint       `json:"id"`
 	Name           string     `json:"name"`
 	Email          string     `json:"email"`
+	TotalPoint     uint       `json:"total_point"`
 	Phone          string     `json:"phone"`
 	Specialization string     `json:"specialization"`
-	ProfilePic     *string    `json:"profile_pic"`
-	CreatedAt      time.Time  `json:"-"`
-	UpdatedAt      time.Time  `json:"-"`
 	LastLoginAt    *time.Time `json:"last_login_at"`
 	FirstLogin     bool       `json:"first_login"`
 }
