@@ -6,9 +6,8 @@ import (
 	"clean/infra/logger"
 	"encoding/json"
 	"fmt"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite" // Sqlite driver based on GGO
 	"gorm.io/gorm"
-	gormlogger "gorm.io/gorm/logger"
 	"io/ioutil"
 	"os"
 	"time"
@@ -19,21 +18,22 @@ var db *gorm.DB
 func ConnectDb() {
 	conf := config.Db()
 
-	logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
+	logger.Info("connecting to sqlite ...")
+	//logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
+	//
+	//logMode := gormlogger.Silent
+	//if conf.Debug {
+	//	logMode = gormlogger.Info
+	//}
+	//
+	//dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", conf.User, conf.Pass, conf.Host, conf.Port, conf.Schema)
+	//
+	//dB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	//	PrepareStmt: true,
+	//	Logger:      gormlogger.Default.LogMode(logMode),
+	//})
 
-	logMode := gormlogger.Silent
-	if conf.Debug {
-		logMode = gormlogger.Info
-	}
-
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", conf.User, conf.Pass, conf.Host, conf.Port, conf.Schema)
-
-	dB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		PrepareStmt: true,
-		Logger:      gormlogger.Default.LogMode(logMode),
-	})
-
-	//dB, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	dB, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
