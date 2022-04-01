@@ -19,5 +19,5 @@ require (
 require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.19.0 // indirect
-	gorm.io/driver/sqlite v1.3.1
+	gorm.io/driver/mysql v1.3.2
 )
