@@ -33,7 +33,7 @@ func NewUsersController(grp interface{}, uSvc svc.IUsers) {
 	g.GET("/v1/user/ranklist", uc.GetUserRankList)
 
 	g.POST("/v1/user/commitments", uc.PostCommitments)
-	g.GET("/v1/user/commitments/:d_id", uc.GetCommitments)
+	g.GET("/v1/user/commitments", uc.GetCommitments)
 	g.DELETE("/v1/user/commitment/delete/:c_id", uc.DeleteCommitments)
 
 	g.POST("/v1/place/create", uc.PlaceCreate)
@@ -242,15 +242,16 @@ func (ctr *users) PostCommitments(c echo.Context) error {
 }
 
 func (ctr *users) GetCommitments(c echo.Context) error {
-	cId, cErr := strconv.Atoi(c.Param("d_id"))
-	if cErr != nil {
-		restErr := errors.NewBadRequestError(cErr.Error())
+	loggedInUser, err := GetUserFromContext(c)
+	if err != nil {
+		logger.Error(err.Error(), err)
+		restErr := errors.NewUnauthorizedError("no logged-in user found")
 		return c.JSON(restErr.Status, restErr)
 	}
 
-	resp, err := ctr.uSvc.GetCommitments(uint(cId))
-	if err != nil {
-		return c.JSON(err.Status, err)
+	resp, gErr := ctr.uSvc.GetCommitments(uint(loggedInUser.ID))
+	if gErr != nil {
+		return c.JSON(gErr.Status, gErr)
 	}
 	return c.JSON(http.StatusOK, resp)
 }

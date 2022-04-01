@@ -6,8 +6,11 @@ import (
 	"clean/infra/logger"
 	"encoding/json"
 	"fmt"
+	"gorm.io/driver/mysql"
+
 	"gorm.io/driver/sqlite" // Sqlite driver based on GGO
 	"gorm.io/gorm"
+	gormlogger "gorm.io/gorm/logger"
 	"io/ioutil"
 	"os"
 	"time"
@@ -15,23 +18,60 @@ import (
 
 var db *gorm.DB
 
-func ConnectDb() {
+func ConnectDbMysql() {
+	conf := config.Db()
+
+	logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
+
+	logMode := gormlogger.Silent
+	if conf.Debug {
+		logMode = gormlogger.Info
+	}
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", conf.User, conf.Pass, conf.Host, conf.Port, conf.Schema)
+
+	dB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		PrepareStmt: true,
+		Logger:      gormlogger.Default.LogMode(logMode),
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	sqlDb, err := dB.DB()
+	if err != nil {
+		panic(err)
+	}
+
+	if conf.MaxIdleConn != 0 {
+		sqlDb.SetMaxIdleConns(conf.MaxIdleConn)
+	}
+	if conf.MaxOpenConn != 0 {
+		sqlDb.SetMaxOpenConns(conf.MaxOpenConn)
+	}
+	if conf.MaxConnLifetime != 0 {
+		sqlDb.SetConnMaxLifetime(conf.MaxConnLifetime * time.Second)
+	}
+
+	db = dB
+
+	db.AutoMigrate(
+		&domain.User{},
+		&domain.Role{},
+		&domain.Permission{},
+		&domain.RolePermission{},
+		&domain.Specialization{},
+		&domain.Commitments{},
+		&domain.Place{},
+	)
+	logger.Info("mysql connection successful...")
+}
+
+func ConnectDbSqlite() {
 	conf := config.Db()
 
 	logger.Info("connecting to sqlite ...")
-	//logger.Info("connecting to mysql at " + conf.Host + ":" + conf.Port + "...")
-	//
-	//logMode := gormlogger.Silent
-	//if conf.Debug {
-	//	logMode = gormlogger.Info
-	//}
-	//
-	//dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", conf.User, conf.Pass, conf.Host, conf.Port, conf.Schema)
-	//
-	//dB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-	//	PrepareStmt: true,
-	//	Logger:      gormlogger.Default.LogMode(logMode),
-	//})
 
 	dB, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 	if err != nil {

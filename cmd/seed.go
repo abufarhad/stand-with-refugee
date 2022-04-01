@@ -19,7 +19,7 @@ var seedCmd = &cobra.Command{
 
 func seed(cmd *cobra.Command, args []string) {
 	// seed roles, permissions, role_permissions
-	conn.ConnectDb()
+	conn.ConnectDbMysql()
 
 	db := conn.Db()
 	truncate, _ = cmd.Flags().GetBool("truncate")

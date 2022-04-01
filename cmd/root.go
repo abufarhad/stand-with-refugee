@@ -25,7 +25,8 @@ func init() {
 // Execute executes the root command
 func Execute() {
 	config.LoadConfig()
-	conn.ConnectDb()
+	//conn.ConnectDbMysql()
+	conn.ConnectDbSqlite()
 	//conn.ConnectRedis()
 
 	logger.Info("about to start the application")

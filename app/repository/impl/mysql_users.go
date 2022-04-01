@@ -327,8 +327,8 @@ func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitm
 		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
 	}
 
-	//usr, _ := r.GetUserByID(commitments.DoctorId)
-	commitments.Point = usr.TotalPoint
+	gUsr, _ := r.GetUserByID(commitments.DoctorId)
+	commitments.Point = gUsr.TotalPoint
 	res := r.DB.Model(&domain.Commitments{}).Create(&commitments)
 
 	if res.Error != nil {
