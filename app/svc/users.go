@@ -11,6 +11,7 @@ type IUsers interface {
 	GetUserById(uid uint) (*domain.User, *errors.RestErr)
 	GetUserByEmail(useremail string) (*domain.User, error)
 	UpdateUser(userID uint, req serializers.UserReq) *errors.RestErr
+	GetUserRankList() ([]*domain.User, *errors.RestErr)
 
 	PostCommitments(commitments domain.Commitments) (*domain.Commitments, *errors.RestErr)
 	GetCommitments(cid uint) ([]*domain.Commitments, *errors.RestErr)

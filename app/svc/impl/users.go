@@ -21,6 +21,15 @@ type users struct {
 	rSvc  svc.ICache
 }
 
+func (u *users) GetUserRankList() ([]*domain.User, *errors.RestErr) {
+	resp, err := u.urepo.GetUserRankListByPoint()
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
 func NewUsersService(urepo repository.IUsers, rSvc svc.ICache) svc.IUsers {
 	return &users{
 		urepo: urepo,

@@ -11,6 +11,7 @@ type IUsers interface {
 	GetUser(userID uint, withPermission bool) (*domain.UserWithPerms, *errors.RestErr)
 	GetUserByID(userID uint) (*domain.User, *errors.RestErr)
 	GetUserByEmail(email string) (*domain.User, error)
+	GetUserRankListByPoint() ([]*domain.User, *errors.RestErr)
 
 	UpdatePassword(userID uint, updateValue map[string]interface{}) *errors.RestErr
 	GetUserByAppKey(appKey string) (*domain.User, *errors.RestErr)

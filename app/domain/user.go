@@ -10,6 +10,7 @@ type User struct {
 	Email            string         `json:"email"`
 	Password         string         `json:"password,omitempty"`
 	Phone            string         `json:"phone"`
+	TotalPoint       uint           `json:"total_point"`
 	RoleId           uint           `json:"role_id"`
 	SpecializationID uint           `json:"specialization_id"`
 	Specialization   Specialization `gorm:"foreignKey:SpecializationID" json:"-"`

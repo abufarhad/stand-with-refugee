@@ -230,6 +230,7 @@ func (ctr *users) PostCommitments(c echo.Context) error {
 	}
 
 	commitment.DoctorId = uint(loggedInUser.ID)
+	commitment.Point = 50
 
 	resp, postErr := ctr.uSvc.PostCommitments(commitment)
 	if postErr != nil {
@@ -351,4 +352,14 @@ func (ctr *users) DeletePlaces(c echo.Context) error {
 		return c.JSON(err.Status, err)
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{"message": "Deleted successfully"})
+}
+
+// Userlist point wise
+func (ctr *users) GetUserRankList(c echo.Context) error {
+
+	resp, err := ctr.uSvc.GetUserRankList()
+	if err != nil {
+		return c.JSON(err.Status, err)
+	}
+	return c.JSON(http.StatusOK, resp)
 }

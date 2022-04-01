@@ -104,7 +104,7 @@ func (r *users) GetUserByID(userID uint) (*domain.User, *errors.RestErr) {
 }
 
 func (r *users) Update(user *domain.User) *errors.RestErr {
-	res := r.DB.Model(&domain.User{}).Omit("password", "app_key").Where("id = ?", user.ID).Updates(&user)
+	res := r.DB.Model(&domain.User{}).Omit("password").Where("id = ?", user.ID).Updates(&user)
 
 	if res.Error != nil {
 		logger.Error("error occurred when updating user by user id", res.Error)
@@ -267,6 +267,18 @@ func (r *users) GetUserWithPermissions(userID uint, withPermission bool) (*domai
 	return &userWithParams, nil
 }
 
+func (r *users) GetUserRankListByPoint() ([]*domain.User, *errors.RestErr) {
+	users := []*domain.User{}
+
+	err := r.DB.Model(&domain.User{}).Order("total_point").
+		Group("doctor_id").Find(&users).Error
+	if err != nil {
+		logger.Error("error occurred when getting all users", err)
+		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
+	}
+	return users, nil
+}
+
 func (r *users) tokenUserFetchQuery() *gorm.DB {
 	selections := `
 		users.id,
@@ -311,6 +323,16 @@ func (r *users) SaveCommitments(commitments domain.Commitments) (*domain.Commitm
 		logger.Error("error occurred when create commitments", res.Error)
 		restErr := fmt.Sprintf("%s", res.Error)
 		return nil, errors.NewInternalServerError(fmt.Sprintf("%s", errors.NewError(restErr)))
+	}
+
+	usr, _ := r.GetUserByID(commitments.DoctorId)
+	upErr := r.DB.Model(&domain.User{}).Updates(map[string]interface{}{
+		"total_point": usr.TotalPoint + commitments.Point,
+	})
+
+	if upErr != nil {
+		logger.Error("error occurred when updating user by user id", res.Error)
+		return nil, errors.NewInternalServerError(errors.ErrSomethingWentWrong)
 	}
 
 	return &commitments, nil
