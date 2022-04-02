@@ -65,6 +65,7 @@ func ConnectDbMysql() {
 		&domain.Commitments{},
 		&domain.Place{},
 		&domain.Symptom{},
+		&domain.Help{},
 	)
 	logger.Info("mysql connection successful...")
 }
@@ -105,6 +106,7 @@ func ConnectDbSqlite() {
 		&domain.Commitments{},
 		&domain.Place{},
 		&domain.Symptom{},
+		&domain.Help{},
 	)
 
 	logger.Info("mysql connection successful...")

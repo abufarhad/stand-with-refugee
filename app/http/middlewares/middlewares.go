@@ -46,6 +46,8 @@ func Attach(e *echo.Echo) error {
 				"/api/v1/symptom/create",
 				"/api/v1/symptom",
 				"/api/v1/symptom/all",
+				"/api/v1/help/create",
+				"/api/v1/help/all",
 				"/api/v1/user/signup":
 				return true
 			default:

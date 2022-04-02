@@ -20,6 +20,7 @@ func Init(g interface{}) {
 	permissionRepo := repoImpl.NewMySqlPermissionsRepository(db)
 	speRepo := repoImpl.NewSpecializationRepository(db)
 	symRepo := repoImpl.NewSymptomRepository(db)
+	hRepo := repoImpl.NewHelpRepository(db)
 
 	cacheSvc := svcImpl.NewRedisService(redis)
 	sysSvc := svcImpl.NewSystemService(sysRepo)
@@ -30,6 +31,7 @@ func Init(g interface{}) {
 	permissionSvc := svcImpl.NewPermissionsService(permissionRepo)
 	spSvc := svcImpl.NewSpecializationService(speRepo)
 	symSvc := svcImpl.NewSymptomService(symRepo)
+	hSvc := svcImpl.NewHelpService(hRepo)
 
 	controllers.NewSystemController(g, sysSvc)
 	controllers.NewAuthController(g, authSvc, userSvc)
@@ -38,4 +40,5 @@ func Init(g interface{}) {
 	controllers.NewPermissionsController(g, acl, permissionSvc)
 	controllers.NewSpecializationController(g, spSvc)
 	controllers.NewSymptomController(g, symSvc)
+	controllers.NewHelpController(g, hSvc)
 }
