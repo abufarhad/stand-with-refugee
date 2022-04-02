@@ -33,7 +33,6 @@ func seed(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	conn.ConnectDbSqlite()
 	server.Start()
 }
 
