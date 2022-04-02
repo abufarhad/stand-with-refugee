@@ -75,7 +75,7 @@ func ConnectDbSqlite() {
 
 	logger.Info("connecting to sqlite ...")
 
-	dB, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	dB, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
