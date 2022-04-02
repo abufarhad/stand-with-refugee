@@ -1,14 +1,11 @@
-## [Unreleased]
-- None
+## [released]
+- Version [1.0.0] - 02-04-2022
 
 ***
-## [1.0.0] - 29-05-2021
+## Changed logs
 ### Added
-- JWT & Permissions & roles added
-- ACL check added
-
+- MonstarCare initial care
 ### Changed
-- refactored project structure
-
+- None
 ### Removed
 - None

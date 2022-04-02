@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "f14852f7-b39b-41d4-96bd-2d11196154de",
-		"name": "Clean",
+		"_postman_id": "b54120ac-6dba-4bf1-8b11-339457d0d6ec",
+		"name": "Stand_with_Refugees(Hacathon_MLBD)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -134,75 +134,6 @@
 								}
 							],
 							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"email\": \"admin@vivasoftltd.com\",\n\t\"password\": \"12345678\",\n    \"admin\": true\n}"
-								},
-								"url": {
-									"raw": "{{schema}}://{{url}}/login",
-									"protocol": "{{schema}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "login sales",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"if (responseCode.code === 200) {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
-											"postman.setEnvironmentVariable(\"refresh_token\", jsonData.refresh_token);",
-											"}"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"email\": \"shahanbhai@vivasoftltd.com\",\n\t\"password\": \"sha!han\",\n    \"admin\": false\n}"
-								},
-								"url": {
-									"raw": "{{schema}}://{{url}}/login",
-									"protocol": "{{schema}}",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "logout",
-							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
@@ -214,19 +145,23 @@
 									]
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
 								"body": {
-									"mode": "formdata",
-									"formdata": []
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"farhad@gmail.com\",\n\t\"password\": \"12345678\"\n}\n"
 								},
 								"url": {
-									"raw": "{{schema}}://{{url}}/logout",
-									"protocol": "{{schema}}",
+									"raw": "{{HURL}}/login",
 									"host": [
-										"{{url}}"
+										"{{HURL}}"
 									],
 									"path": [
-										"logout"
+										"login"
 									]
 								}
 							},
@@ -858,64 +793,134 @@
 			]
 		},
 		{
-			"name": "Company",
+			"name": "Doctor",
 			"item": [
 				{
-					"name": "Comany signup",
-					"event": [
+					"name": "Commitment",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"if (responseCode.code === 200) {",
-									"    var jsonData = JSON.parse(responseBody);",
-									"    postman.setEnvironmentVariable(\"app_key\", jsonData.app_key);",
-									"}"
+							"name": "Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "AppKey",
+										"value": "{{app_key}}",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "SecretKey",
-								"value": "dHepoR82!e#",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Vivasoft\",\n    \"logo\": \"vivasoftltd.png\",\n    \"address\": \"dohs,mirpur\",\n    \"password\": \"12345678\",\n    \"business_id\": 1,\n    \"num_of_employee\": 50,\n    \"email\": \"admin@vivasoftltd.com\",\n    \"sns_link\": \"www.vivasoftltd.com\",\n    \"phone\": \"123123123\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"place_id\":2,\n   \"date\":\"1994-04-13T00:00:00Z\",\n   \"start_time\":\"1994-04-13T00:00:00Z\",\n   \"end_time\":\"1994-04-13T00:00:00Z\"\n}"
+								},
+								"url": {
+									"raw": "{{HURL}}/user/commitments",
+									"host": [
+										"{{HURL}}"
+									],
+									"path": [
+										"user",
+										"commitments"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{schema}}://{{url}}/company/signup",
-							"protocol": "{{schema}}",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"company",
-								"signup"
-							]
+						{
+							"name": "Get all by doctor id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "AppKey",
+										"value": "{{app_key}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"place_id\":1,\n   \"date\":\"20-06-1997\",\n   \"start_time\":\"2022-03-31T12:40:09.430128+06:00\",\n   \"end_time\":\"2022-04-31T12:40:09.430128+06:00\"\n}"
+								},
+								"url": {
+									"raw": "{{HURL}}/user/commitments",
+									"host": [
+										"{{HURL}}"
+									],
+									"path": [
+										"user",
+										"commitments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all by doctor id Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{HURL}}/user/commitment/delete/8",
+									"host": [
+										"{{HURL}}"
+									],
+									"path": [
+										"user",
+										"commitment",
+										"delete",
+										"8"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
+					]
+				},
 				{
-					"name": "User signup",
+					"name": "Doctor signup",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -936,19 +941,18 @@
 							},
 							{
 								"key": "AppKey",
-								"value": "65672ef5-b6f3-4c2a-8f86-7cb85734a4a0",
+								"value": "{{access_token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"first_name\": \"shahan\",\n    \"last_name\": \"khan\",\n    \"email\": \"shahanbhai@vivasoftltd.com\",\n    \"password\": \"sha!han\",\n    \"phone\": \"1234453\"\n}"
+							"raw": "{\n    \"name\": \"Farhad\",\n    \"email\": \"farhad@gmail.com\",\n    \"password\": \"12345678\",\n    \"phone\":\"01722319838\",\n    \"specialization_id\": 2\n}"
 						},
 						"url": {
-							"raw": "{{schema}}://{{url}}/user/signup",
-							"protocol": "{{schema}}",
+							"raw": "{{HURL}}/user/signup",
 							"host": [
-								"{{url}}"
+								"{{HURL}}"
 							],
 							"path": [
 								"user",
@@ -959,28 +963,320 @@
 					"response": []
 				},
 				{
-					"name": "Resolve User by API Key",
+					"name": "Doctor Rank list",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "AppKey",
-								"value": "075ea9e05865e64c9f1f06422b8cb379"
+								"value": "{{app_key}}",
+								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "{{schema}}://{{url}}/user/resolve",
-							"protocol": "{{schema}}",
+							"raw": "{{HURL}}/user/ranklist",
 							"host": [
-								"{{url}}"
+								"{{HURL}}"
 							],
 							"path": [
 								"user",
-								"resolve"
+								"ranklist"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Specialization",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"specialization\": \"Immunology\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/specialization/create",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"specialization",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"specialization\": \"Immunology1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/specialization/1",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"specialization",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HURL}}/specialization/all",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"specialization",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Symptom",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symptom\": \"Head pain\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/symptom/create",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"symptom",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symptom\": \"Head pain\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/symptom/1",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"symptom",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HURL}}/symptom/all",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"symptom",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Help",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symptom\": \"Head pain\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/symptom/create",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"symptom",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HURL}}/symptom/all",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"symptom",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Place",
+			"item": [
+				{
+					"name": "Create Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"place_name\": \"zone_2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/place/create",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"place",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getall",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"place_name\": \"zone_1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HURL}}/place/getall",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"place",
+								"getall"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete place",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HURL}}/place/delete/2",
+							"host": [
+								"{{HURL}}"
+							],
+							"path": [
+								"place",
+								"delete",
+								"2"
 							]
 						}
 					},
@@ -991,20 +1287,53 @@
 		{
 			"name": "Health Check",
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{schema}}://{{url}}/ping",
+					"raw": "{{schema}}://{{url}}/h34l7h",
 					"protocol": "{{schema}}",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"ping"
+						"h34l7h"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "schema",
+			"value": "http"
+		},
+		{
+			"key": "url",
+			"value": "localhost:8080/api/v1"
 		}
 	]
 }
