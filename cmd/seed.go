@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	server "clean/app/http"
 	"clean/infra/conn"
 	"clean/infra/logger"
 	"fmt"
@@ -31,6 +32,8 @@ func seed(cmd *cobra.Command, args []string) {
 			logger.Error(fmt.Sprintf("Running seed '%s', failed with error:", seed.Name), err)
 		}
 	}
+
+	server.Start()
 }
 
 func init() {
