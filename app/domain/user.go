@@ -5,21 +5,21 @@ import (
 )
 
 type User struct {
-	ID               uint           `json:"id"`
-	Name             string         `json:"name"`
-	Email            string         `json:"email"`
-	Password         string         `json:"password,omitempty"`
-	Phone            string         `json:"phone"`
-	TotalPoint       uint           `json:"total_point"`
-	RoleId           uint           `json:"role_id"`
-	SpecializationID uint           `json:"specialization_id"`
-	Specialization   Specialization `gorm:"foreignKey:SpecializationID" json:"-"`
-	ProfilePic       *string        `json:"profile_pic"`
-	LastLoginAt      *time.Time     `json:"last_login_at"`
-	FirstLogin       bool           `json:"first_login" gorm:"column:first_login;default:true"`
-	CreatedAt        time.Time      `json:"created_at"`
-	UpdatedAt        time.Time      `json:"updated_at"`
-	DeletedAt        *time.Time     `json:"deleted_at"`
+	ID               uint   `json:"id"`
+	Name             string `json:"name"`
+	Email            string `json:"email"`
+	Password         string `json:"password,omitempty"`
+	Phone            string `json:"phone"`
+	TotalPoint       uint   `json:"total_point"`
+	RoleId           uint   `json:"role_id"`
+	SpecializationID uint   `json:"specialization_id"`
+	//Specialization   Specialization `gorm:"foreignKey:SpecializationID" json:"-"`
+	ProfilePic  *string    `json:"profile_pic"`
+	LastLoginAt *time.Time `json:"last_login_at"`
+	FirstLogin  bool       `json:"first_login" gorm:"column:first_login;default:true"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	DeletedAt   *time.Time `json:"deleted_at"`
 }
 
 type Users []*User

@@ -124,27 +124,27 @@ type Seed struct {
 func SeedAll() []Seed {
 	return []Seed{
 		{
-			Name: "CreateRoles",
+			Name: "Place",
 			Run: func(db *gorm.DB, truncate bool) error {
-				if err := seedRoles(db, "/infra/seed/roles.json", truncate); err != nil {
+				if err := seedPlaces(db, "/infra/seed/place.json", truncate); err != nil {
 					return err
 				}
 				return nil
 			},
 		},
 		{
-			Name: "CreatePermissions",
+			Name: "Specialization",
 			Run: func(db *gorm.DB, truncate bool) error {
-				if err := seedPermissions(db, "/infra/seed/permissions.json", truncate); err != nil {
+				if err := seedSpecialization(db, "/infra/seed/specialization.json", truncate); err != nil {
 					return err
 				}
 				return nil
 			},
 		},
 		{
-			Name: "CreateRolePermissions",
+			Name: "Symptoms",
 			Run: func(db *gorm.DB, truncate bool) error {
-				if err := seedRolePermissions(db, "/infra/seed/role_permissions.json", truncate); err != nil {
+				if err := seedSymptoms(db, "/infra/seed/symptoms.json", truncate); err != nil {
 					return err
 				}
 				return nil
@@ -153,55 +153,55 @@ func SeedAll() []Seed {
 	}
 }
 
-func seedRoles(db *gorm.DB, jsonfilPath string, truncate bool) error {
+func seedPlaces(db *gorm.DB, jsonfilPath string, truncate bool) error {
 	file, _ := readSeedFile(jsonfilPath)
-	roles := []domain.Role{}
+	places := []domain.Place{}
 
-	_ = json.Unmarshal([]byte(file), &roles)
+	_ = json.Unmarshal([]byte(file), &places)
 
 	if truncate {
-		db.Exec("TRUNCATE TABLE clean_db.role_permissions;")
-		db.Exec("TRUNCATE TABLE clean_db.permissions;")
-		db.Exec("TRUNCATE TABLE clean_db.roles;")
+		db.Exec("TRUNCATE TABLE refugee.places;")
+		db.Exec("TRUNCATE TABLE refugee.specializations;")
+		db.Exec("TRUNCATE TABLE refugee.symptoms;")
 	}
 
 	var count int64
 
-	db.Model(&domain.Role{}).Count(&count)
+	db.Model(&domain.Place{}).Count(&count)
 	if count == 0 {
-		db.Create(&roles)
-	}
-
-	return nil
-}
-
-func seedPermissions(db *gorm.DB, jsonfilPath string, truncate bool) error {
-	file, _ := readSeedFile(jsonfilPath)
-	perms := []domain.Permission{}
-
-	_ = json.Unmarshal([]byte(file), &perms)
-
-	var count int64
-
-	db.Model(&domain.Permission{}).Count(&count)
-	if count == 0 {
-		db.Create(&perms)
+		db.Create(&places)
 	}
 
 	return nil
 }
 
-func seedRolePermissions(db *gorm.DB, jsonfilPath string, truncate bool) error {
+func seedSpecialization(db *gorm.DB, jsonfilPath string, truncate bool) error {
 	file, _ := readSeedFile(jsonfilPath)
-	rp := []domain.RolePermission{}
+	spcial := []domain.Specialization{}
 
-	_ = json.Unmarshal([]byte(file), &rp)
+	_ = json.Unmarshal([]byte(file), &spcial)
 
 	var count int64
 
-	db.Model(&domain.RolePermission{}).Count(&count)
+	db.Model(&domain.Specialization{}).Count(&count)
 	if count == 0 {
-		db.Create(&rp)
+		db.Create(&spcial)
+	}
+
+	return nil
+}
+
+func seedSymptoms(db *gorm.DB, jsonfilPath string, truncate bool) error {
+	file, _ := readSeedFile(jsonfilPath)
+	symp := []domain.Symptom{}
+
+	_ = json.Unmarshal([]byte(file), &symp)
+
+	var count int64
+
+	db.Model(&domain.Symptom{}).Count(&count)
+	if count == 0 {
+		db.Create(&symp)
 	}
 
 	return nil
