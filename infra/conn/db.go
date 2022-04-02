@@ -160,9 +160,9 @@ func seedPlaces(db *gorm.DB, jsonfilPath string, truncate bool) error {
 	_ = json.Unmarshal([]byte(file), &places)
 
 	if truncate {
-		db.Exec("TRUNCATE TABLE refugee.places;")
-		db.Exec("TRUNCATE TABLE refugee.specializations;")
-		db.Exec("TRUNCATE TABLE refugee.symptoms;")
+		db.Exec("DELETE TABLE refugee.places;")
+		db.Exec("DELETE TABLE refugee.specializations;")
+		db.Exec("DELETE TABLE refugee.symptoms;")
 	}
 
 	var count int64
