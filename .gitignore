@@ -24,5 +24,8 @@ bin
 .db_data
 .redis-persistence
 
+# environment file
+.env
+
 # library
 vendor
